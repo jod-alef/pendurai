@@ -19,14 +19,14 @@ Certifique-se de ter as seguintes dependências instaladas:
 - Pipenv ou Virtualenv (opcional, para gerenciar ambientes virtuais)
 - Banco de dados configurado (SQLite por padrão)
 
-### Instalação das Dependências
+## Instalação das Dependências
 As dependências estão listadas no arquivo `requirements.txt`. Instale-as com o comando:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Configuração do Projeto
+# Configuração do Projeto
 ## 1. Configuração Inicial
 
 Após instalar as dependências, configure o banco de dados e execute as migrações:
@@ -55,13 +55,13 @@ Acesse o sistema em: http://127.0.0.1:8000/.
 npx tailwindcss ./static/src/input.css -o ./static/src/output.css --watch
 ```
 
-### Funcionalidades
+# Funcionalidades
 ## 1. Gerenciamento de Clientes
 
     Cadastrar Cliente: Insira nome, CPF, e-mail, telefone e endereço de forma simples.
     Busca Dinâmica: Filtre clientes por nome ou telefone.
 
-# 2. Débitos
+## 2. Débitos
 
     Adicionar Débitos: Insira compras associadas a um cliente específico.
     Pagamento Parcial: Registre pagamentos parciais com valores convertidos automaticamente para negativos.
@@ -74,7 +74,7 @@ npx tailwindcss ./static/src/input.css -o ./static/src/output.css --watch
 
 ## 4. Rotas Disponíveis
 
-# As rotas principais do sistema são:
+### As rotas principais do sistema são:
     Rota                        Descrição
     /                           Página inicial com lista de clientes.
     /cadastro/	                Cadastro de novos clientes.
@@ -83,25 +83,25 @@ npx tailwindcss ./static/src/input.css -o ./static/src/output.css --watch
     /remover_cliente/<id>/	    Remover cliente da base de dados.
     /listar_fiados/<id>/	    Exibe lista de débitos do cliente no modal.
 
-### Estrutura do Projeto
+# Estrutura do Projeto
 ## Diretório cadastro/
 
-# Contém os componentes principais do sistema:
+### Contém os componentes principais do sistema:
 
     models.py: Define as classes Cadastro e Conta usadas para representar clientes e débitos.
     forms.py: Contém os formulários CadastroForm e ContaForm com widgets estilizados.
     views.py: Gerencia as principais operações, como listar clientes, adicionar débitos e registrar pagamentos.
 
-# Templates
+### Templates
 
     Templates organizados no diretório templates/:
         index.html: Página inicial.
         partials/: Includes reutilizáveis, como a lista de débitos no modal.
         static/: CSS e outros arquivos estáticos
 
-### Dependências Principais
+# Dependências Principais
 
-# Veja algumas bibliotecas usadas no projeto:
+### Veja algumas bibliotecas usadas no projeto:
 
     Django: Framework web principal.
     HTMX: Para atualizações dinâmicas no frontend.
