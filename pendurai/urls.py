@@ -16,7 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from cadastro import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.index, name='index'),
+    path('cadastro/', views.cadastro_clientes, name='cadastro_clientes'),
+    path('conta/', views.conta, name='conta'),
+    path('adicionar_conta/<int:cliente_id>/', views.adicionar_conta, name='adicionar_conta'),
+    path('buscar_clientes/', views.buscar_clientes, name='buscar_clientes'),
+    path('form_cadastro_cliente/', views.form_cadastro_cliente, name='form_cadastro_cliente'),
+    path('remover_cliente/<int:cliente_id>/', views.remover_cliente, name='remover_cliente'),
+    path('listar_fiados/<int:cliente_id>/', views.lista_fiados_cliente, name='lista_fiados_cliente'),
+    path('pagamento_parcial/<int:cliente_id>/', views.pagamento_parcial, name='pagamento_parcial'),
+    path('atualizar_lista_clientes/', views.atualizar_lista_clientes, name='atualizar_lista_clientes'),
 ]

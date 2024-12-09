@@ -1,0 +1,183 @@
+{% load static %}
+{% load compress %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Penduraí{% endblock %}</title>
+    <!-- Importando Tailwind CSS -->
+    {% compress css %}
+    <link rel="stylesheet" href="{% static 'src/output.css' %}">
+    {% endcompress %}
+    <!-- Importando HTMX -->
+    <script src="https://unpkg.com/htmx.org@2.0.3"></script>
+    <style>
+        /* Estilo para o modal */
+        .modal-bg {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-bg.active {
+            display: flex;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen transition-colors duration-300" id="body">
+    <!-- Cabeçalho comum -->
+    <header class="bg-gray-800 border-gray-200 dark:bg-gray-900">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <h1 class="self-center text-2xl font-semibold whitespace-nowrap text-white">Penduraí</h1>
+            <div class="flex space-x-4 items-center">
+                <!-- Barra de Busca -->
+                <form
+                    hx-get="{% url 'buscar_clientes' %}"
+                    hx-target="#clientes-list"
+                    hx-swap="outerHTML"
+                    hx-trigger="keyup changed delay:1000ms"
+                    class="flex items-center">
+                    <input
+                        type="text"
+                        name="q"
+                        placeholder="Buscar Clientes..."
+                        class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    />
+                </form>
+                <!-- Botão Adicionar Cliente -->
+                <button
+                    hx-get="{% url 'form_cadastro_cliente' %}"
+                    hx-target="#modal-content"
+                    hx-trigger="click"
+                    class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900"
+                    onclick="openModal()">
+                    Adicionar Cliente
+                </button>
+                <!-- Botão Modo Escuro -->
+                <button
+                    onclick="toggleDarkMode()"
+                    class="bg-gray-800 text-white font-bold py-2 px-4 rounded hover:bg-gray-700 shadow">
+                    🌙
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Bloco de conteúdo -->
+    <main class="container mx-auto mt-6 bg-gray-100 text-gray-900 transition-colors duration-300">
+    {% block content %}
+    <!-- Conteúdo será inserido aqui pelos templates filhos -->
+    {% endblock %}
+</main>
+
+    <!-- Modal -->
+    <div id="modal-default" class="modal-bg hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+    <div id="modal-content" class="p-4 md:p-5 space-y-4 bg-white rounded-lg shadow dark:bg-gray-700 transition-colors duration-300">
+        <!-- O conteúdo do modal será carregado aqui via HTMX -->
+        <button
+            class="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+            onclick="closeModal()">X
+        </button>
+    </div>
+    </div>
+</div>
+
+
+    <!-- Rodapé comum -->
+    <footer class="bg-gray-800 text-white text-center py-4 mt-6">
+        <div class="container mx-auto">
+            <p>&copy; 2024 - Desenvolvido por Jod Alef</p>
+        </div>
+    </footer>
+
+    <script>
+        // Alternar Modo Escuro
+function toggleDarkMode() {
+    const body = document.getElementById('body');
+    const modal = document.getElementById('modal-content');
+    const mainContent = document.querySelector('main');
+    const clientesList = document.getElementById('clientes-list');
+
+    // Alternar classes no body
+    body.classList.toggle('bg-gray-100');
+    body.classList.toggle('bg-gray-900');
+    body.classList.toggle('text-gray-900');
+    body.classList.toggle('text-gray-100');
+
+    // Alternar classes no modal
+    modal.classList.toggle('bg-white');
+    modal.classList.toggle('bg-gray-800');
+    modal.classList.toggle('text-gray-900');
+    modal.classList.toggle('text-gray-100');
+
+    // Aplicar modo escuro ao conteúdo principal
+    mainContent.classList.toggle('bg-gray-100');
+    mainContent.classList.toggle('bg-gray-900');
+    mainContent.classList.toggle('text-gray-900');
+    mainContent.classList.toggle('text-gray-100');
+
+    // Aplicar modo escuro à lista de clientes
+    clientesList.classList.toggle('bg-gray-100');
+    clientesList.classList.toggle('bg-gray-900');
+    clientesList.classList.toggle('text-gray-900');
+    clientesList.classList.toggle('text-gray-100');
+}
+
+// Reaplicar tema ao conteúdo dinâmico após requisição HTMX
+document.addEventListener('htmx:afterRequest', () => {
+    const isDarkMode = document.getElementById('body').classList.contains('bg-gray-900');
+    const clientesList = document.getElementById('clientes-list');
+    if (isDarkMode) {
+        clientesList.classList.add('bg-gray-900', 'text-gray-100');
+        clientesList.classList.remove('bg-gray-100', 'text-gray-900');
+    } else {
+        clientesList.classList.add('bg-gray-100', 'text-gray-900');
+        clientesList.classList.remove('bg-gray-900', 'text-gray-100');
+    }
+})
+
+
+
+        function openModal() {
+            document.getElementById('modal-default').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal-default').classList.remove('active');
+        }
+
+        function handleAfterRequest(event) {
+            const response = event.detail.xhr.response;
+            const data = JSON.parse(response);
+
+            if (data.success) {
+                // Atualiza a lista de clientes
+                document.getElementById('clientes-list').innerHTML = data.html;
+
+                // Fecha o modal se o 'close_modal' for verdadeiro
+                if (data.close_modal) {
+                    closeModal();
+                }
+            }
+        }
+        function convertToNegative(event) {
+    const input = document.getElementById('valor-pagamento');
+    if (input) {
+        const valor = parseFloat(input.value);
+        if (valor > 0) {
+            input.value = -valor; // Converte para negativo
+        }
+    }
+}
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+</body>
+</html>

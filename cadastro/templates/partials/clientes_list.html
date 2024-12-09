@@ -1,0 +1,5 @@
+<tbody id="clientes-list" class="bg-gray-100 text-gray-900 transition-colors duration-300">
+    {% for cliente_info in clientes_com_debitos %}
+        {% include 'partials/cliente_row.html' with cliente=cliente_info.cliente total_debitos=cliente_info.total_debitos %}
+    {% endfor %}
+</tbody>

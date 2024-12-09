@@ -1,0 +1,36 @@
+<tr id="cliente-{{ cliente.id }}" class="bg-gray-100 text-gray-900 transition-colors duration-300">
+    <td class="px-4 py-2">
+        <a
+            hx-get="{% url 'lista_fiados_cliente' cliente.id %}"
+            hx-target="#modal-content"
+            hx-trigger="click"
+            onclick="openModal()"
+            class="underline text-blue-600 cursor-pointer hover:text-blue-800">
+            {{ cliente.nome }}
+        </a>
+    </td>
+    <td class="px-4 py-2">{{ cliente.email }}</td>
+    <td class="px-4 py-2">{{ cliente.telefone }}</td>
+    <td class="px-4 py-2 text-right">R$ {{ total_debitos|floatformat:2 }}</td>
+    {% comment %}<td class="px-4 py-2 text-center">
+        <!-- Botão Pendurar -->
+        <button
+            hx-get="{% url 'adicionar_conta' cliente.id %}"
+            hx-target="#modal-content"
+            hx-trigger="click"
+            class="bg-white text-blue-600 font-bold py-2 px-4 rounded hover:bg-gray-200 shadow transition-colors duration-300"
+            onclick="openModal()">
+            Pendurar
+        </button>
+        <!-- Botão Remover -->
+        <button
+            hx-delete="{% url 'remover_cliente' cliente.id %}"
+            hx-target="#clientes-list"
+            hx-swap="outerHTML"
+            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+            class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded ml-2 transition-colors duration-300">
+            Remover Cliente
+        </button>
+    </td>{% endcomment %}
+</tr>
+<tr id="cliente-{{ cliente.id }}-form"></tr>

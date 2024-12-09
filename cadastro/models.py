@@ -1,24 +1,23 @@
 from django.db import models
 
 
-# Create your models here.
-
 class Cadastro(models.Model):
     nome = models.CharField(max_length=100)
-    email = models.EmailField()
-    telefone = models.IntegerField()
+    email = models.EmailField(max_length=100)
+    telefone = models.CharField(max_length=11)
     cpf = models.CharField(max_length=11)
-    endereço = models.CharField(max_length=100)
+    endereco = models.CharField(max_length=100)
+    data_cadastro = models.DateField(auto_now=True)
 
     def __str__(self):
         return self.nome
 
 
 class Conta(models.Model):
-    nome = models.ForeignKey(Cadastro, on_delete=models.CASCADE)
-    produto = models.CharField(max_length=100)
-    quantidade = models.FloatField()
-    valor = models.FloatField()
+    cliente = models.ForeignKey(Cadastro, on_delete=models.CASCADE)
+    data_compra = models.DateField(auto_now_add=True)
+    compra = models.CharField(max_length=100)
+    valor = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return f"{self.nome.nome} - Débito = R$ {self.valor}"
+        return f"{self.nome.nome} - Valor = R$ {self.valor}"

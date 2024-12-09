@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from cadastro.models import Cadastro, Conta
+
+admin.site.register(Cadastro)
+admin.site.register(Conta)

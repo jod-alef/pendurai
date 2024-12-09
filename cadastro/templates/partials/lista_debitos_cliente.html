@@ -1,0 +1,78 @@
+<h1 class="text-2xl font-bold mb-4">Lista de Fiados</h1>
+<h2 class="text-xl mb-6">{{ cliente.nome }}</h2>
+
+<table class="table table-striped w-full border-collapse bg-gray-100 text-gray-900 transition-colors duration-300">
+    <thead>
+        <tr class="bg-gray-200">
+            <th class="text-left py-4 px-6 border-bottom border-2 border-black">Data</th>
+            <th class="border px-4 py-2">Compra</th>
+            <th class="border px-4 py-2">Valor</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for fiados in fiado %}
+            <tr>
+                <td class="border px-4 py-2">{{ fiados.data_compra|date:"d/m/Y" }}</td>
+                <td class="border px-4 py-2">{{ fiados.compra }}</td>
+                <td class="border px-4 py-2">R$ {{ fiados.valor|floatformat:2 }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="mt-6 grid grid-cols-2 gap-4">
+    <div class="text-xl font-medium text-black">Total pendurado:</div>
+    <div class="text-red-950">R$ {{ total|floatformat:2 }}</div>
+</div>
+
+<!-- Formulário para Adicionar Débito -->
+<form
+    hx-post="{% url 'adicionar_conta' cliente.id %}"
+    hx-target="#modal-content"
+    hx-swap="innerHTML"
+    class="mt-6 flex items-center space-x-4">
+    {% csrf_token %}
+    {{ form.compra }}
+    {{ form.valor }}
+    <button
+        type="submit"
+        class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+        Pendurar
+    </button>
+</form>
+<div class="mt-6 flex items-center space-x-4">
+<form
+    hx-post="{% url 'pagamento_parcial' cliente.id %}"
+    hx-target="#modal-content"
+    hx-swap="innerHTML"
+    class="mt-6 flex items-center space-x-4"
+    onsubmit="convertToNegative(event)">
+    {% csrf_token %}
+    <input
+        id="valor-pagamento"
+        type="number"
+        name="valor"
+        placeholder="Valor do Pagamento"
+        class="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+        required
+    />
+    <button
+        type="submit"
+        class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+        Pagar
+    </button>
+</form>
+</div>
+<!-- Botão Fechar -->
+<div class="flex justify-end space-x-2 mt-4">
+    <button
+    type="button"
+    class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+    hx-get="{% url 'atualizar_lista_clientes' %}"
+    hx-swap="outerHTML"
+    hx-target="#clientes-list"
+    hx-trigger="click"
+    onclick="closeModal()">
+    Fechar
+    </button>
+</div>
