@@ -27,6 +27,14 @@ pip install -r requirements.txt
 ```
 
 # Configuração do Projeto
+## 0.1 Pré configuração .env
+
+Crie um arquivo .env na raiz de seu projeto e adicione os seguintes dados, não esqueça de incluir uma secret_key:
+
+    DEBUG = on
+    SECRET_KEY = 
+    ALLOWED_HOSTS=localhost
+
 ## 1. Configuração Inicial
 
 Após instalar as dependências, configure o banco de dados e execute as migrações:
